@@ -1,6 +1,6 @@
 {
     "name": "${modName}",
     "entry": "${modFile}",
-    "version": "${modVersion}",
+    "version": "1.0.0",
     "type": "native"
 }
