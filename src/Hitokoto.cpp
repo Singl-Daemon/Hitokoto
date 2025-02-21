@@ -5,6 +5,8 @@
 
 #include <ll/api/event/player/PlayerJoinEvent.h>
 
+#include <mc/network/packet/ToastRequestPacket.h>
+
 #include <optional>
 #include <string>
 #include <utility>
@@ -34,8 +36,8 @@ GetHitokoto(const std::string& hitokotoUrl, const std::string& hitokotoType) {
     }
 
     try {
-        const auto jsonResponse = nlohmann::json::parse(readBuffer);
-        if (jsonResponse.contains("hitokoto") && jsonResponse.contains("from")) {
+        if (const auto jsonResponse = nlohmann::json::parse(readBuffer);
+            jsonResponse.contains("hitokoto") && jsonResponse.contains("from")) {
             return std::make_pair(jsonResponse["hitokoto"].get<std::string>(), jsonResponse["from"].get<std::string>());
         }
         return std::nullopt;
@@ -53,8 +55,17 @@ void RegisterListener() {
                 std::async(std::launch::async, []() { return GetHitokoto(config->hitokotoUrl, config->hitokotoType); });
             getHitokotoTask.wait();
             if (const auto hitokoto = getHitokotoTask.get(); hitokoto.has_value()) {
-                player.sendMessage(config->contentColor + hitokoto->first);
-                player.sendMessage(config->authorColor + "---- " + hitokoto->second);
+                if (config->sendType == Config::sendType::chat) {
+                    player.sendMessage(config->contentColor + hitokoto->first);
+                    player.sendMessage(config->authorColor + "---- " + hitokoto->second);
+                }
+                if (config->sendType == Config::sendType::toast) {
+                    auto pkt = ToastRequestPacket(
+                        config->contentColor + hitokoto->second,
+                        config->authorColor + "---- " + hitokoto->first
+                    );
+                    player.sendNetworkPacket(pkt);
+                }
             } else {
                 player.sendMessage("Failed to get hitokoto.");
             }
