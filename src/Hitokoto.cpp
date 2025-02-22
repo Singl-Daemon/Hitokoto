@@ -60,10 +60,9 @@ void RegisterListener() {
                     player.sendMessage(config->authorColor + "---- " + hitokoto->second);
                 }
                 if (config->sendType == Config::sendType::toast) {
-                    auto pkt = ToastRequestPacket(
-                        config->contentColor + hitokoto->second,
-                        config->authorColor + "---- " + hitokoto->first
-                    );
+                    auto pkt = ToastRequestPacket();
+                    pkt.mTitle = config->authorColor + hitokoto->first;
+                    pkt.mContent = config->contentColor + "---- " + hitokoto->second;
                     player.sendNetworkPacket(pkt);
                 }
             } else {
