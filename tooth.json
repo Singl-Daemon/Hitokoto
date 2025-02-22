@@ -1,7 +1,7 @@
 {
     "format_version": 2,
     "tooth": "Hitokoto",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "info": {
         "name": "Hitokoto",
         "description": "Hitokoto for BDS",
@@ -11,7 +11,7 @@
             "type:mod"
         ]
     },
-    "asset_url": "https://github.com/Singl-Daemon/Hitokoto/releases/download/1.0.0/Hitokoto.zip",
+    "asset_url": "https://github.com/Singl-Daemon/Hitokoto/releases/download/1.0.1/Hitokoto.zip",
     "prerequisites": {
         "github.com/LiteLDev/LeviLamina": "1.0.1"
     },
